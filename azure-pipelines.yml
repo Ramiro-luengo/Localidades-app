@@ -4,8 +4,8 @@ trigger:
 pr:
   branches:
     include:
-    - feature/*
-    - fix/*
+      - feature/*
+      - fix/*
 
 variables:
   tag: '$(Build.BuildId)'
