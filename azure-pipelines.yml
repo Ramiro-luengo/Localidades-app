@@ -1,0 +1,44 @@
+trigger:
+- main
+
+pr:
+  branches:
+    include:
+    - feature/*
+    - fix/*
+
+variables:
+  tag: '$(Build.BuildId)'
+
+stages:
+- stage: Build
+  displayName: Build image
+  jobs:
+  - job: Build
+    displayName: Build
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+    - checkout: self
+    - task: Docker@2
+      displayName: Build an image
+      inputs:
+        command: build
+        dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
+        tags: $(tag)
+    - task: Npm@1
+      inputs:
+        command: 'install'
+        workingDir: '$(Build.SourcesDirectory)'
+    - task: Bash@3
+      displayName: Test App
+      inputs:
+        workingDirectory: $(Build.SourcesDirectory)
+        targetType: 'inline'
+        script: 'npm test'
+    - task: PublishTestResults@2
+      inputs:
+        testResultsFormat: 'JUnit'
+        testResultsFiles: '**/TEST-*.xml'
+        searchFolder: '$(Build.SourcesDirectory)/reports'
+
