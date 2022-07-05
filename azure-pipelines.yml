@@ -27,8 +27,14 @@ stages:
         dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
         tags: $(tag)
     - task: Bash@3
+      displayName: Node Version Check
+      inputs:
+        targetType: 'inline'
+        script: 'node -v'
+    - task: Bash@3
       displayName: Test App
       inputs:
+        workingDirectory: $(Build.SourcesDirectory)
         targetType: 'inline'
         script: 'npm test'
     - task: PublishTestResults@2
