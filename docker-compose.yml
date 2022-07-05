@@ -1,0 +1,5 @@
+services:
+  app:
+    image: ramiro/node-locations-app
+    ports:
+      - "8080:8080"
