@@ -26,11 +26,10 @@ stages:
         command: build
         dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
         tags: $(tag)
-    - task: Bash@3
-      displayName: Node Version Check
+    - task: Npm@1
       inputs:
-        targetType: 'inline'
-        script: 'node -v'
+        command: 'install'
+        workingDir: '$(Build.SourcesDirectory)'
     - task: Bash@3
       displayName: Test App
       inputs:
