@@ -29,7 +29,8 @@ stages:
     - task: Bash@3
       displayName: Test App
       inputs:
-        script: '$(Build.SourcesDirectory)/'
+        targetType: 'inline'
+        script: 'npm test'
     - task: PublishTestResults@2
       inputs:
         testResultsFormat: 'JUnit'
