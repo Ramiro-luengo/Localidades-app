@@ -25,7 +25,7 @@ function localidades_by_name(localidades, name) {
     return localidades.localidades.find((elem) => elem.nombre == name)
 }
 
-export function localidades(req, res, cache) {
+export default function localidades(req, res, cache) {
     let loc_promise;
 
     if (!fs.existsSync(LOCALIDADES_FILE_PATH)) {
