@@ -1,9 +1,11 @@
 const winston = require('winston');
 
 const getLogger = (filename) => {
+    const relativePath = filename.split("\\src\\")[1]
+
     const logger = winston.createLogger({
         format: winston.format.json(),
-        defaultMeta: { module: filename },
+        defaultMeta: { module: relativePath },
         transports: [
             new winston.transports.File({ filename: 'logs/errors.log', level: 'error' }),
             new winston.transports.File({ filename: 'logs/all.log' }),
@@ -14,7 +16,8 @@ const getLogger = (filename) => {
         logger.add(new winston.transports.Console({
             format: winston.format.combine(
                 winston.format.colorize(),
-                winston.format.simple()
+                winston.format.splat(),
+                // winston.format.simple(),
             )
         }));
     }
