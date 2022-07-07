@@ -36,10 +36,10 @@ stages:
       inputs:
         workingDirectory: $(Build.SourcesDirectory)
         targetType: 'inline'
-        script: 'npm test'
+        script: 'gen-test-reports'
     - task: PublishTestResults@2
       inputs:
         testResultsFormat: 'JUnit'
-        testResultsFiles: '**/TEST-*.xml'
         searchFolder: '$(Build.SourcesDirectory)/reports'
+        testResultsFiles: '*.xml'
 
