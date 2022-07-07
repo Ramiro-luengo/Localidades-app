@@ -36,7 +36,7 @@ stages:
       inputs:
         workingDirectory: $(Build.SourcesDirectory)
         targetType: 'inline'
-        script: 'gen-test-reports'
+        script: 'npm gen-test-reports'
     - task: PublishTestResults@2
       inputs:
         testResultsFormat: 'JUnit'
