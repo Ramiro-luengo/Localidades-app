@@ -9,6 +9,7 @@ pr:
 
 variables:
   tag: '$(Build.BuildId)'
+  TOKEN_SECRET: pescado
 
 stages:
 - stage: Build
