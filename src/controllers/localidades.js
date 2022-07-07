@@ -1,6 +1,8 @@
 const fs = require('fs');
+const fsPromises = fs.promises;
 const axios = require('axios');
 const NodeCache = require('node-cache');
+
 const getLogger = require('../utils/logger');
 const logger = getLogger(__filename);
 
@@ -17,22 +19,22 @@ class LocalidadesController {
         const res = await axios.get(LOCALIDADES_URL);
         const data = await res.data;
 
-        // Can write to the file and contine, doesn't need to be sync.
-        fs.writeFile(LOCALIDADES_FILE_PATH, JSON.stringify(data, null, 4), () => {
-            logger.info('The local file has been updated!');
+        // Can write to the file and continue, doesn't need to be sync.
+        fsPromises.writeFile(LOCALIDADES_FILE_PATH, JSON.stringify(data, null, 4)).then(() => {
+            logger.info('The local file has been updated!')
         });
 
         return data
     }
 
     async getLocalidadesData() {
-        if (!fs.existsSync(LOCALIDADES_FILE_PATH)) {
+        if (!fs.existsSync((LOCALIDADES_FILE_PATH))) {
             // Re-download file.
             return this.refresh_localidades_file();
         }
         else {
             // Use local file.
-            const data = fs.readFileSync(LOCALIDADES_FILE_PATH);
+            const data = await fsPromises.readFile(LOCALIDADES_FILE_PATH, { encoding: "utf-8" });
 
             return JSON.parse(data);
         }
@@ -71,7 +73,7 @@ class LocalidadesController {
             return res.status(200).json(localidadesData);
         }
         catch (err) {
-            logger.error(err);
+            logger.error({ trace: err, url: req.url });
             return res.status(404).json({ message: "An error has occured" });
         }
     }
