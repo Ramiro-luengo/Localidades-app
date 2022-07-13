@@ -1,0 +1,1 @@
+# docker exec -it training-db-1 bash -c 'mongo test -u root -p example' #--eval "db.createUser({user: "root", pwd:"example", roles: [{role: "readWrite", db: "test"}]})"'

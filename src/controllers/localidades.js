@@ -41,20 +41,27 @@ class LocalidadesController {
     }
 
     async localidad(req, res) {
-        const name = req.params.name;
+        let name = req.params.name;
+
         if (!name) {
             return res.status(404).json({ error: "Please input a valid name" });
         }
 
         const localidades = await this.getLocalidadesData();
 
+        let res_data;
         if (this.cache.has(name)) {
             logger.info(`Used cache hit for: ${name}`);
             res_data = this.cache.get(name);
         }
         else {
-            res_data = localidades.localidades.find((elem) => elem.nombre == name);
-            this.cache.set(name, res_data);
+            try{
+                res_data = localidades.localidades.find((elem) => elem.nombre.split(' ').join('_').toLowerCase() == name);
+                this.cache.set(name, res_data);
+            }
+            catch (err){
+                logger.log(err)
+            }
         }
 
         if (res_data) {
